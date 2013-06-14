@@ -1,0 +1,5 @@
+*.sw*
+.idea/
+tmp
+Thumbs.db
+*.gem
