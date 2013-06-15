@@ -6,8 +6,6 @@ module Monad
     # a Nothing
     #
     class Just < Base
-      attr_reader :value
-  
       def initialize(value)
         @value = value
       end
