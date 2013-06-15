@@ -1,5 +1,3 @@
-require 'singleton'
-
 require_relative 'maybe/base'
 require_relative 'maybe/just'
 require_relative 'maybe/nothing'
