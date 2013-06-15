@@ -20,7 +20,7 @@ class MaybeTest < Test::Unit::TestCase
   end
 
   def test_false
-    assert_false false.maybe.value
+    assert_equal false, false.maybe.value
   end
 
   def test_nil_conversions
