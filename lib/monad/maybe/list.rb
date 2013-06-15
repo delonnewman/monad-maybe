@@ -16,7 +16,7 @@ module Monad
       end
   
       def <<(obj)
-        @enum << obj if obj.is_a?(Just)
+        @enum << obj if obj.just?
         self
       end
   

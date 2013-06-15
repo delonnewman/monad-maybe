@@ -7,7 +7,7 @@ module Monad
   module Maybe
     module Enumerable
       def to_maybe
-        Base.create(first)
+        first.maybe
       end
   
       def maybe_map
@@ -19,10 +19,9 @@ module Monad
     class ::Range; include Enumerable end
   
     class ::Object
-      def to_maybe
-        Base.create(self)
+      def maybe
+        Just.new(self)
       end
-      alias maybe to_maybe
   
       def maybe?
         false
@@ -35,6 +34,24 @@ module Monad
       def nothing?
         false
       end
+    end
+
+    class ::NilClass
+      def maybe
+        Nothing.instance.freeze
+      end
+    end
+
+    def maybe(o)
+      o.maybe
+    end
+
+    def just(o)
+      Just.new(o)
+    end
+
+    def nothing
+      Nothing.instance
     end
   end
 end

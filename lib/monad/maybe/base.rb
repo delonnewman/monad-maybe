@@ -1,10 +1,8 @@
 module Monad
   module Maybe
     class Base
-      def self.create(val)
-        (val.nil? && Nothing.instance.freeze) || Just.new(val)
-      end
-  
+      attr_reader :value
+
       def <<(obj)
         to_list << obj
       end
@@ -13,10 +11,9 @@ module Monad
         true
       end
   
-      def to_maybe
+      def maybe
         self
       end
-      alias maybe to_maybe
   
       def to_list
         List.new(to_a)
