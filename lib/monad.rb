@@ -1,3 +1,0 @@
-module Monad
-
-end

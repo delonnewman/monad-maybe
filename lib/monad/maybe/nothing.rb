@@ -1,4 +1,4 @@
-require_relative 'base'
+require 'singleton'
 
 module Monad
   module Maybe
