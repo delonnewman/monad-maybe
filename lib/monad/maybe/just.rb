@@ -45,9 +45,9 @@ module Monad
       def inspect
         "just(#{value.inspect})"
       end
-  
+
       def to_s
-        inspect
+        Just.new(value.to_s)
       end
   
       def to_a

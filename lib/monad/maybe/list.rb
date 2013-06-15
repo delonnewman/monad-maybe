@@ -25,9 +25,8 @@ module Monad
       end
   
       def to_maybe
-        Base.create(first)
+        first.maybe
       end
-      alias maybe to_maybe
   
       def each
         @enum.each do |x|
@@ -61,16 +60,12 @@ module Monad
         select { |x| x.just? }
       end
   
-      def unwrap_map(default)
-        to_a.map { |x| x.unwrap(default) }
+      def unwrap_map(default, &blk)
+        to_a.map { |x| blk ? blk.call(x.unwrap(default)) : x.unwrap(default) }
       end
   
-      def select_just_map_value
-        select_just.value_map
-      end
-  
-      def value_map
-        to_a.map { |x| x.value }
+      def value_map(&blk)
+        to_a.map { |x| blk ? blk.call(x.value) : x.value }
       end
     end
   end

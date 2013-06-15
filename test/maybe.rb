@@ -24,34 +24,7 @@ class MaybeTest < Test::Unit::TestCase
   end
 
   def test_nil_conversions
-    methods = [ :nil?, :to_a, :to_c, :to_f, :to_h, :to_i, :to_r, :to_s ]
-    methods.each do |m|
-      assert_equal nil.send(m), nil.maybe.send(m)
-    end
-  end
-
-  def test_plus_op
-    assert_equal "hey there", nil.maybe + "hey there"
-    assert_equal 1, nil.maybe + 1
-  end
-
-  def test_minus_op
-    assert_equal -1, nil.maybe - 1
-    assert_equal 0, -(nil.maybe)
-  end
-
-  def test_mult_op
-    assert_equal "", nil.maybe * "Something" 
-    assert_equal 0, nil.maybe * 9
-  end
-
-  def test_comparison_ops
-    assert nil.maybe < 1
-    assert nil.maybe > -1
-    assert nil.maybe <= nil.maybe
-    assert nil.maybe <= 0
-    assert nil.maybe <= nil
-    assert nil.maybe >= -4
+    assert_equal nil.nil?, nil.maybe.nil?
   end
 
   def test_class
