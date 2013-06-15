@@ -4,8 +4,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "monad-maybe"
   gem.summary = %Q{A Ruby implementation of Haskell's Maybe Monad}
   gem.description = %Q{This is an attempt to implement Haskell's Maybe monad in a Ruby-ish way with as little monkey patching as possible.}
-  gem.email = "drnewman@phrei.org"
-  gem.homepage = "http://phrei.org"
+  gem.email = "delon.newman@gmail.com"
+  gem.homepage = "https://github.com/delonnewman/monad-maybe"
   gem.authors = ["Delon Newman"]
 end
 Jeweler::RubygemsDotOrgTasks.new
