@@ -1,15 +1,15 @@
 require 'test/unit'
-require_relative '../lib/dragnet/utils/maybe'
+require_relative '../lib/monad/maybe'
 
 class MaybeTest < Test::Unit::TestCase
-  include Dragnet::Utils
-  
   def test_nothing
-    assert_equal maybe{ nil }, maybe{ nil }
+    assert_equal nothing, maybe{ nil }
   end
 
   def test_just
     assert maybe{ 1 }.just?
+    assert_equal just{1}, maybe{1}
+    assert_equal 1, just{1}.from_just
   end
 
   def test_to_a
@@ -38,7 +38,7 @@ class MaybeTest < Test::Unit::TestCase
 
   def test_minus_op
     assert_equal -1, maybe{ nil } - 1
-    assert_equal maybe{ nil }, -maybe{ nil }
+    assert_equal 0, -maybe{ nil }
   end
 
   def test_mult_op
@@ -61,7 +61,19 @@ class MaybeTest < Test::Unit::TestCase
 
   def test_list
     xs = maybe{ true } << maybe{ nil } << maybe{ 1 } << maybe{ 3 }
-    assert_equal 3, list.count
+    assert_equal 3, xs.count
     xs.map { |x| assert x.just? }
+  end
+
+  def test_enumerable
+    assert_nothing_raised do
+      xs = (0..10).select { |n| n % 2 != 0 }
+      ys = (0..10).map_maybe { |n| n % 2 == 0 ? nil : n }.filter_map_just
+      assert_equal xs.count, ys.count
+    end
+
+    assert_raise do
+      (0..10).map_maybe { |n| n % 2 == 0 ? nil : n }.map_from_just     
+    end
   end
 end
