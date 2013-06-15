@@ -1,9 +1,85 @@
 require 'singleton'
 
-module Monad
-  private
+module MaybeMonad
+  class MaybeList
+    include Enumerable
 
-  module Maybe
+    def initialize(enum)
+      @enum = enum.map { |v| v = v.maybe unless v.maybe?; v }
+    end
+
+    def inspect
+      "#{to_a}"
+    end
+
+    def maybe?
+      true
+    end
+
+    def <<(obj)
+      @enum << obj if obj.is_a?(Just)
+      self
+    end
+
+    def to_a
+      @enum.to_a
+    end
+
+    def to_maybe
+      Maybe.create(first)
+    end
+    alias maybe to_maybe
+
+    def each
+      @enum.each do |x|
+        yield(x)
+      end
+    end
+
+    def map
+      e = []
+      each do |x|
+        e << yield(x)
+      end
+      MaybeList.new(e)
+    end
+    alias maybe_map map
+
+    def select
+      e = []
+      each do |x|
+        is_true = yield(x)
+        e << x if is_true  
+      end
+      MaybeList.new(e)
+    end
+
+    def reject
+      select { |x| !yield(x) }
+    end
+
+    def select_just
+      select { |x| x.just? }
+    end
+
+    def unwrap_map(default)
+      to_a.map { |x| x.unwrap(default) }
+    end
+
+    def select_just_map_value
+      select_just.value_map
+    end
+
+    def value_map
+      to_a.map { |x| x.value }
+    end
+  end
+
+  class Maybe
+    def self.create(val)
+      (val.nil? && Nothing.instance.freeze) || Just.new(val)
+    end
+
     def <<(obj)
       to_list << obj
     end
@@ -11,38 +87,18 @@ module Monad
     def maybe?
       true
     end
-  end
 
-  class MaybeList
-    include Enumerable
-
-    def self.create(obj=nil)
-      if obj.is_a?(Just)
-        MaybeList.new(obj)
-      else
-        MaybeList.new
-      end
-    end
-
-    def initialize(obj)
-      @list = []
-      self << obj
-    end
-
-    def inspect
-      "[#{@list.to_a.join(', ')}]"
-    end
-
-    def <<(obj)
-      @list << obj if obj.is_a?(Just)
+    def to_maybe
       self
     end
+    alias maybe to_maybe
 
-    def each
-      @list.each do |x|
-        yield x
-      end
+    def to_list
+      MaybeList.new(to_a)
     end
+
+    private
+    def initialize; end
   end
 
   #
@@ -50,23 +106,20 @@ module Monad
   # objects as a Maybe while distinguishing them from
   # a Nothing
   #
-  class Just
-    include Maybe
+  class Just < Maybe
+    attr_reader :value
 
-    def initialize(&blk)
-      @blk = blk
+    def initialize(value)
+      @value = value
     end
 
-    def call
-      @value ||= @blk.call
+    def method_missing(method, *args)
+      Just.new(value.send(method, *args))
     end
-    alias from_just call
-    alias value call
 
-    def from_maybe(val)
-      from_just
+    def unwrap(val)
+      value
     end
-    alias unwrap from_maybe
 
     def nothing?
       false
@@ -81,21 +134,19 @@ module Monad
     end
 
     def ==(other)
-      other.is_a?(Just) ? call == other.call : false 
+      self === other || self.value == other
+    end
+
+    def ===(other)
+      other.just? && self.value == other.value
     end
 
     def equal?(other)
       other.__id__ == self.__id__
     end
-    alias === equal?
-
-    def is_a?(klass)
-      klass == Maybe or klass == Just or klass == BasicObject
-    end
-    alias kind_of? is_a?
 
     def inspect
-      "just(#{call.inspect})"
+      "just(#{value.inspect})"
     end
 
     def to_s
@@ -105,28 +156,19 @@ module Monad
     def to_a
       [self]
     end
-
-    def to_list
-      MaybeList.new(self)
-    end
-
-    def to_json(*args)
-      call.to_json
-    end
-
-    def class
-      Just
-    end
   end
 
   #
   # A better nil
   #
-  class Nothing
-    include Maybe
+  class Nothing < Maybe
     include ::Singleton
 
     def method_missing(method, *args)
+      self
+    end
+
+    def clone
       self
     end
 
@@ -146,10 +188,9 @@ module Monad
       false
     end
 
-    def from_maybe(val)
+    def unwrap(val)
       val
     end
-    alias unwrap from_maybe
 
     def value
       nil
@@ -160,10 +201,6 @@ module Monad
     end
 
     # collection methods
-
-    def to_list
-      MaybeList.new
-    end
 
     def to_a
       []
@@ -213,25 +250,6 @@ module Monad
       end
     end
 
-    # type introspection methods
-
-    def class
-      Nothing
-    end
-
-    def instance_of?(klass)
-      klass == Nothing
-    end
-
-    def is_a?(klass)
-      klass == Maybe or klass == Nothing or klass == Object
-    end
-    alias kind_of? is_a?
-
-    def clone
-      self
-    end
-
     # logical methods, evaluates to false
 
     def |(other)
@@ -256,6 +274,7 @@ module Monad
     def to_s
       ''
     end
+    alias to_str to_s
 
     def to_i
       0
@@ -299,62 +318,39 @@ module Monad
     end
   end
 
-  public
-
-  def maybe(default=nil, &blk)
-    m = ((val = blk.call).nil? && Nothing.instance.freeze) || Just.new{ val }
-    default ? m.from_maybe(default) : m
-  end
-
-  def nothing
-    Nothing.instance.freeze
-  end
-
-  def just(&blk)
-    Just.new(&blk)
-  end
-
   module MaybeEnumerable
     def to_maybe
-      maybe{ first }
+      Maybe.create(first)
     end
 
-    def cat_maybes
-      select { |x| x.is_a?(Maybe) && x.just? }
+    def maybe_map
+      MaybeList.new(map{ |x| yield(x) })
     end
-    alias select_just cat_maybes
-    alias filter_just cat_maybes
-
-    def map_maybe
-      map do |x|
-        maybe{ yield x }
-      end
-    end
-
-    def map_from_maybe(default)
-      map do |x|
-        x.is_a?(Maybe) && x.from_maybe(default)
-      end
-    end
-    alias map_unwrap map_from_maybe
-
-    def map_from_just
-      map do |x|
-        raise Exception, "#{x} is not a Just instance" unless x.is_a?(Just)
-        x.from_just
-      end
-    end
-
-    def filter_map_just
-      filter_just.map_from_just
-    end
-    alias select_map_just filter_map_just
   end
 
   class ::Array; include MaybeEnumerable end
   class ::Range; include MaybeEnumerable end
   class ::Enumerator::Lazy; include MaybeEnumerable end
   class MaybeList; include MaybeEnumerable end
+
+  class ::Object
+    def to_maybe
+      Maybe.create(self)
+    end
+    alias maybe to_maybe
+
+    def maybe?
+      false
+    end
+
+    def just?
+      false
+    end
+
+    def nothing?
+      false
+    end
+  end
 end
 
-include Monad
+include MaybeMonad
