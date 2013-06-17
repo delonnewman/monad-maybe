@@ -47,6 +47,10 @@ module Monad
       def maybe
         Nothing.instance.freeze
       end
+
+      def something?
+        false
+      end
     end
 
     def maybe(o)

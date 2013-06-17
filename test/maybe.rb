@@ -46,4 +46,37 @@ class MaybeTest < Test::Unit::TestCase
       assert_equal xs.count, ys.count
     end
   end
+
+  def test_something?
+    assert_nothing_raised do
+      nil.something? do
+        raise Exception, "This should not be called"
+      end
+  
+      nothing.something? do
+        raise Exception, "This should not be called"
+      end
+    end
+
+    assert_equal false, nil.something?
+    assert_equal false, nothing.something?
+
+    1.something? do |n|
+      assert_equal 1, n
+    end
+
+    assert 1.something?
+
+    1.maybe.something? do |n|
+      assert_equal 1, n
+    end
+
+    assert 1.maybe.something?
+
+    (0..10).maybe_map { |n| n % 2 == 0 ? nil : n }.something? do |xs|
+      assert_equal (0..10).select { |n| n % 2 != 0 }, xs
+    end
+
+    assert (0..10).maybe_map { |n| n }.something?
+  end
 end
