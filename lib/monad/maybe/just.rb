@@ -21,6 +21,11 @@ module Monad
       def nothing?
         false
       end
+
+      def something?(&blk)
+        blk.call(value) if blk
+        true
+      end
   
       def just?
         true

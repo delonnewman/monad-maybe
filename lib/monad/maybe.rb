@@ -36,6 +36,11 @@ module Monad
       def nothing?
         false
       end
+
+      def something?(&blk)
+        blk.call(self) if blk
+        true
+      end
     end
 
     class ::NilClass

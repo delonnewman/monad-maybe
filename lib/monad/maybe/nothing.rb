@@ -31,6 +31,7 @@ module Monad
       def just?
         false
       end
+      alias something? just?
   
       def unwrap(val)
         val
