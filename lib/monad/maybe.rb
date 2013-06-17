@@ -3,6 +3,8 @@ require_relative 'maybe/just'
 require_relative 'maybe/nothing'
 require_relative 'maybe/list'
 
+# Top-level module includes some monkey patching and
+# constructor methods.  Monad::Maybe is included by default.
 module Monad
   module Maybe
     module Enumerable
