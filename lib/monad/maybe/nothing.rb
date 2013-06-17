@@ -45,8 +45,9 @@ module Monad
       end
 
       def to_s
-        self
+        ''
       end
+      alias to_str to_s
 
       def to_a
         []

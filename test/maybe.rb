@@ -6,6 +6,7 @@ class MaybeTest < Test::Unit::TestCase
     assert nil.maybe.nothing?
     assert nil.maybe.value.nil?
     assert_equal 'test', nil.maybe.unwrap('test')
+    assert_equal '', nothing.to_s
   end
 
   def test_just
