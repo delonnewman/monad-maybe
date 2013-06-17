@@ -47,36 +47,39 @@ class MaybeTest < Test::Unit::TestCase
     end
   end
 
-  def test_something?
+  def test_maybe_block
     assert_nothing_raised do
-      nil.something? do
+      nil.maybe do
         raise Exception, "This should not be called"
       end
   
-      nothing.something? do
+      nothing.maybe do
+        raise Exception, "This should not be called"
+      end
+
+      maybe(nil) do
         raise Exception, "This should not be called"
       end
     end
 
+    1.maybe do |n|
+      assert_equal 1, n
+    end
+
+    maybe(1) do |n|
+      assert_equal 1, n
+    end
+
+    just(1).maybe do |n|
+      assert_equal 1, n
+    end
+  end
+
+  def test_something?
     assert_equal false, nil.something?
     assert_equal false, nothing.something?
-
-    1.something? do |n|
-      assert_equal 1, n
-    end
-
     assert 1.something?
-
-    1.maybe.something? do |n|
-      assert_equal 1, n
-    end
-
     assert 1.maybe.something?
-
-    (0..10).maybe_map { |n| n % 2 == 0 ? nil : n }.something? do |xs|
-      assert_equal (0..10).select { |n| n % 2 != 0 }, xs
-    end
-
     assert (0..10).maybe_map { |n| n }.something?
   end
 end

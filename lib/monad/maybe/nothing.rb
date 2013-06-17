@@ -28,10 +28,17 @@ module Monad
         true
       end
   
+      def maybe(&blk)
+        self
+      end
+
       def just?
         false
       end
-      alias something? just?
+
+      def something?
+        false
+      end
   
       def unwrap(val)
         val

@@ -11,9 +11,6 @@ module Monad
         true
       end
   
-      def maybe
-        self
-      end
   
       def to_list
         List.new(to_a)

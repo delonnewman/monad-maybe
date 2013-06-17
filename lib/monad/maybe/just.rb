@@ -22,13 +22,20 @@ module Monad
         false
       end
 
-      def something?(&blk)
-        blk.call(value) if blk
+      def something?
         true
       end
   
       def just?
         true
+      end
+
+      def maybe(&blk)
+        if blk
+          Just.new(blk.call(self.value))
+        else
+          self
+        end
       end
   
       def nil?

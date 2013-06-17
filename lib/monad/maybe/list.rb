@@ -15,11 +15,6 @@ module Monad
         true
       end
 
-      def something?(&blk)
-        blk.call(select_just.value_map) if blk
-        true
-      end
-  
       def <<(obj)
         @enum << obj if obj.just?
         self

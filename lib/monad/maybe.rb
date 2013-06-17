@@ -21,8 +21,12 @@ module Monad
     class ::Range; include Enumerable end
   
     class ::Object
-      def maybe
-        Just.new(self)
+      def maybe(&blk)
+        if blk
+          Just.new(blk.call(self))
+        else
+          Just.new(self)
+        end
       end
   
       def maybe?
@@ -38,13 +42,12 @@ module Monad
       end
 
       def something?(&blk)
-        blk.call(self) if blk
         true
       end
     end
 
     class ::NilClass
-      def maybe
+      def maybe(&blk)
         Nothing.instance.freeze
       end
 
@@ -53,8 +56,8 @@ module Monad
       end
     end
 
-    def maybe(o)
-      o.maybe
+    def maybe(o, &blk)
+      o.maybe(&blk)
     end
 
     def just(o)
