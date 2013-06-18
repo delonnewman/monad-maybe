@@ -25,7 +25,6 @@ module Monad
         true
       end
 
-      # NOTE: being able to return Nothings maybe dangerous
       def maybe(&blk)
         bind(blk)
       end
