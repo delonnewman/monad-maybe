@@ -1,3 +1,4 @@
+require 'rake/testtask'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
@@ -20,4 +21,8 @@ end
 desc "Setup for development"
 task :setup do
   sh "bundle"
+end
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
 end
