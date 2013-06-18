@@ -1,10 +1,5 @@
 module Monad
   module Maybe
-    #
-    # Wraps a non-nil object allows us to treat these
-    # objects as a Maybe while distinguishing them from
-    # a Nothing
-    #
     class Just < Base
       def initialize(value)
         @value = value
@@ -30,7 +25,7 @@ module Monad
         true
       end
 
-      # NOTE: This being able to return Nothings maybe dangerous
+      # NOTE: being able to return Nothings maybe dangerous
       def maybe(&blk)
         if blk
           blk.call(self.value).to_maybe
@@ -60,8 +55,9 @@ module Monad
       end
 
       def to_s
-        Just.new(value.to_s)
+        value.to_s
       end
+      alias to_str to_s
   
       def to_a
         [self]

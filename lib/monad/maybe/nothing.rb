@@ -2,9 +2,6 @@ require 'singleton'
 
 module Monad
   module Maybe
-    #
-    # A better nil
-    #
     class Nothing < Base
       include ::Singleton
   
@@ -48,10 +45,6 @@ module Monad
         nil
       end
   
-      def to_json(*args)
-        'null'
-      end
-
       def to_s
         ''
       end

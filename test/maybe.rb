@@ -1,5 +1,6 @@
 require 'test/unit'
 require_relative '../lib/monad/maybe'
+require_relative '../lib/monad/maybe/json'
 
 class MaybeTest < Test::Unit::TestCase
   def test_nothing
@@ -13,6 +14,15 @@ class MaybeTest < Test::Unit::TestCase
     assert 1.maybe.just?
     assert_equal 1, 1.maybe.value
     assert_equal 1, 1.maybe.unwrap('test')
+    assert_equal '1', just(1).to_s
+  end
+
+  def test_json
+    assert_equal 'null', nothing.to_json
+    assert_equal '1', just(1).to_json
+    assert_equal '{}', just({}).to_json
+    assert_equal '[]', just([]).to_json
+    assert_equal (0..10).to_a.to_json, (0..10).maybe_map { |n| n }.to_json
   end
 
   def test_to_a
