@@ -25,19 +25,16 @@ module Monad
         true
       end
   
-      def maybe(&blk)
+      def unwrap(&blk)
         self
       end
+      alias bind unwrap
 
       def just?
         false
       end
 
-      def something?
-        false
-      end
-  
-      def unwrap(val)
+      def from_maybe(val)
         val
       end
   

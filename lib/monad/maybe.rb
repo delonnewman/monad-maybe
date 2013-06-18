@@ -1,3 +1,4 @@
+require_relative '../monad'
 require_relative 'maybe/base'
 require_relative 'maybe/just'
 require_relative 'maybe/nothing'
@@ -15,9 +16,6 @@ module Enumerable
     Monad::Maybe::List.new(map{ |x| yield(x) })
   end
 end
-  
-class Array; include Enumerable end
-class Range; include Enumerable end
   
 class Object
   def maybe(obj=self, &blk)
@@ -43,10 +41,6 @@ class Object
   def nothing?
     false
   end
-
-  def something?(&blk)
-    true
-  end
 end
 
 class NilClass
@@ -56,10 +50,6 @@ class NilClass
 
   def maybe(&blk)
     to_maybe
-  end
-
-  def something?
-    false
   end
 end
 

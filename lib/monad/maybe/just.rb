@@ -9,7 +9,7 @@ module Monad
         value.send(method, *args).maybe
       end
   
-      def unwrap(val)
+      def from_maybe(val)
         value
       end
   
@@ -17,22 +17,14 @@ module Monad
         false
       end
 
-      def something?
-        true
-      end
-  
       def just?
         true
       end
 
-      # NOTE: being able to return Nothings maybe dangerous
-      def maybe(&blk)
-        if blk
-          blk.call(self.value).to_maybe
-        else
-          self
-        end
+      def unwrap(&blk)
+        blk.call(self.value)
       end
+      alias bind unwrap
   
       def nil?
         false

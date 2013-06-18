@@ -1,6 +1,6 @@
 module Monad
   module Maybe
-    class Base
+    class Base < Monad::Base
       attr_reader :value
 
       def <<(obj)
@@ -18,7 +18,7 @@ module Monad
       def to_maybe
         self
       end
-  
+
       private
       def initialize; end
     end

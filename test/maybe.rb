@@ -101,14 +101,6 @@ class MaybeTest < Test::Unit::TestCase
     assert o.nothing?
   end
 
-  def test_something?
-    assert_equal false, nil.something?
-    assert_equal false, nothing.something?
-    assert 1.something?
-    assert 1.maybe.something?
-    assert (0..10).maybe_map { |n| n }.something?
-  end
-
   def test_to_maybe
     assert_equal just(1), 1.to_maybe
     assert_equal just(1), just(1).to_maybe
