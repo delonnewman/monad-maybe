@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "monad-maybe"
-  s.version = "0.9.2"
+  s.version = "0.9.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delon Newman"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
     "VERSION",
     "lib/monad/maybe.rb",
     "lib/monad/maybe/base.rb",
+    "lib/monad/maybe/json.rb",
     "lib/monad/maybe/just.rb",
     "lib/monad/maybe/list.rb",
     "lib/monad/maybe/nothing.rb",
