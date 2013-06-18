@@ -39,8 +39,8 @@ class MaybeTest < Test::Unit::TestCase
   end
 
   def test_class
-    assert_equal Nothing, nil.maybe.class
-    assert_equal Just, 1.maybe.class
+    assert_equal Monad::Maybe::Nothing, nil.maybe.class
+    assert_equal Monad::Maybe::Just, 1.maybe.class
   end
 
   def test_list

@@ -1,7 +1,7 @@
 require 'json'
 
 #
-# Adds JSON conversions to Just, Nothing, and MaybeList
+# Adds JSON conversions to Just, Nothing, and List
 #
 module Monad
   module Maybe
