@@ -11,7 +11,7 @@ module Monad
       end
   
       def method_missing(method, *args)
-        Just.new(value.send(method, *args))
+        value.send(method, *args).maybe
       end
   
       def unwrap(val)
@@ -30,9 +30,10 @@ module Monad
         true
       end
 
+      # NOTE: This being able to return Nothings maybe dangerous
       def maybe(&blk)
         if blk
-          Just.new(blk.call(self.value))
+          blk.call(self.value).to_maybe
         else
           self
         end

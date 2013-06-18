@@ -25,7 +25,7 @@ module Monad
       end
   
       def to_maybe
-        first.maybe
+        first.to_maybe
       end
   
       def each

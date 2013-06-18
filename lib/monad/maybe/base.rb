@@ -11,9 +11,12 @@ module Monad
         true
       end
   
-  
       def to_list
         List.new(to_a)
+      end
+
+      def to_maybe
+        self
       end
   
       private
