@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = "monad-maybe"
-  s.version = "0.9.1"
+  s.version = "0.9.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Delon Newman"]
-  s.date = "2013-06-17"
-  s.description = "This is an attempt to implement Haskell's Maybe monad in a Ruby-ish way with as little monkey patching as possible."
+  s.date = "2013-06-18"
+  s.description = "This is an attempt to implement Haskell's Maybe monad in a Ruby-ish way."
   s.email = "delon.newman@gmail.com"
   s.extra_rdoc_files = [
     "README.md"
