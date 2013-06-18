@@ -22,7 +22,3 @@ desc "Setup for development"
 task :setup do
   sh "bundle"
 end
-
-Rake::TestTask.new do |t|
-  t.libs << 'test'
-end
