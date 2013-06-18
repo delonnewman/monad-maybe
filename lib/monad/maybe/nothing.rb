@@ -25,7 +25,7 @@ module Monad
         true
       end
   
-      def maybe(&blk)
+      def bind(fn)
         self
       end
 

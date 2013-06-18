@@ -27,11 +27,11 @@ module Monad
 
       # NOTE: being able to return Nothings maybe dangerous
       def maybe(&blk)
-        if blk
-          blk.call(self.value).to_maybe
-        else
-          self
-        end
+        bind(blk)
+      end
+
+      def bind(fn)
+        fn[@value].to_maybe
       end
   
       def nil?

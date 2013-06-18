@@ -8,7 +8,7 @@ require_relative 'maybe/list'
 #
 module Enumerable
   def to_maybe
-    first.maybe
+    first.to_maybe
   end
   
   def maybe_map
@@ -16,18 +16,7 @@ module Enumerable
   end
 end
   
-class Array; include Enumerable end
-class Range; include Enumerable end
-  
 class Object
-  def maybe(obj=self, &blk)
-    if obj && blk
-      blk.call(obj).to_maybe
-    else
-      obj.to_maybe
-    end
-  end
-
   def to_maybe
     Monad::Maybe::Just.new(self)
   end
@@ -43,24 +32,24 @@ class Object
   def nothing?
     false
   end
-
-  def something?(&blk)
-    true
-  end
 end
 
 class NilClass
   def to_maybe
-    Monad::Maybe::Nothing.instance.freeze
+    Monad::Maybe::Nothing.instance
   end
+end
 
-  def maybe(&blk)
-    to_maybe
+module Monad
+  module Maybe
+    def self.return(obj)
+      obj.to_maybe
+    end
   end
+end
 
-  def something?
-    false
-  end
+def maybe(obj)
+  Monad::Maybe.return(obj)
 end
 
 def just(o)

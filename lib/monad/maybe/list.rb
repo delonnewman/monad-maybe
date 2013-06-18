@@ -4,7 +4,7 @@ module Monad
       include Enumerable
   
       def initialize(enum)
-        @enum = enum.map { |v| v.maybe? ? v : v.maybe }
+        @enum = enum.map { |v| v.maybe? ? v : v.to_maybe }
       end
   
       def inspect

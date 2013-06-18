@@ -18,6 +18,19 @@ module Monad
       def to_maybe
         self
       end
+
+      def maybe(&blk)
+        bind(blk)
+      end
+
+      def then(fn)
+        bind(->(x){ fn && fn.call })
+        self
+      end
+
+      def and(&blk)
+        self.then(blk)
+      end
   
       private
       def initialize; end
