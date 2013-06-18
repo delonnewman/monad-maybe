@@ -1,7 +1,8 @@
 module Functor
-  class Base
-    def fmap(&blk)
-    end
+  def fmap(fn)
+  end
+
+  def join
   end
 end
 
@@ -14,7 +15,7 @@ end
 #     m >>= return = m
 #
 #   In Ruby:
-#     m.bind { |v| v.return } = m 
+#     m.bind ->(v) { |v| v.return } = m 
 #
 # 2) Left unit
 #
@@ -22,7 +23,7 @@ end
 #     return x >>= f = f x
 #
 #   In Ruby:
-#     x.return.bind { |v| 
+#     x.return.bind(f) = f[x]  
 #
 # 3) Associativity
 #
@@ -30,29 +31,43 @@ end
 #     (m >>= f) >>= g = m >>= (\x -> f x >>= g)
 #
 #   In Ruby
+#     m.bind(f).bind(g) = m.bind ->(x) { f[x].bind(g) }
 #
 
 module Monad
-  class Base < Functor::Base
-    def wrap(value)
+  class << self
+    def included(klass)
+      klass.extend(ClassMethods)
+    end
+  end
+
+  module ClassMethods
+    def return(value)
       new(value)
     end
-    alias return wrap
+    alias wrap return
+  end
 
-    def unwrap(&blk)
-    end
-    alias bind unwrap
+  def bind(fn)
+    fn[@value]
+  end
 
-    def then(&blk)
-      unwrap do
-        blk.call
-      end
-    end
+  def unwrap(&blk)
+    bind(blk)
+  end
 
-    private
-    def initialize(value)
-      @value = value
-    end
+  def then(fn)
+    bind(->(x){ fn.call })
+    self
+  end
+
+  def ==(other)
+    other.is_a?(Monad) && other.bind(->(x) { x == @value })
+  end
+
+  private
+  def initialize(value)
+    @value = value
   end
 end
 
