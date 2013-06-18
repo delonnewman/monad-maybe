@@ -1,6 +1,8 @@
 module Monad
-  module Maybe
-    class Just < Base
+  class Maybe
+    class Just
+      include Monad
+
       def initialize(value)
         @value = value
       end
@@ -21,11 +23,6 @@ module Monad
         true
       end
 
-      def unwrap(&blk)
-        blk.call(self.value)
-      end
-      alias bind unwrap
-  
       def nil?
         false
       end

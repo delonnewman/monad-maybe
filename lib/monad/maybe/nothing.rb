@@ -1,8 +1,8 @@
 require 'singleton'
 
 module Monad
-  module Maybe
-    class Nothing < Base
+  class Maybe
+    class Nothing
       include ::Singleton
   
       def method_missing(method, *args)
