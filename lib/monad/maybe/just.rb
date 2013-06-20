@@ -6,7 +6,7 @@ module Monad
       end
   
       def method_missing(method, *args)
-        value.send(method, *args).maybe
+        value.send(method, *args).to_maybe
       end
   
       def unwrap(val)
