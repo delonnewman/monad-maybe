@@ -7,8 +7,8 @@ require_relative 'maybe/list'
 # Some monkey patching and constructor methods.
 #
 module Enumerable
-  def to_maybe
-    first.to_maybe
+  def to_maybe(&blk)
+    first.to_maybe(&blk)
   end
   
   def maybe_map
@@ -17,8 +17,9 @@ module Enumerable
 end
   
 class Object
-  def to_maybe
-    Monad::Maybe::Just.new(self)
+  def to_maybe(&blk)
+    j = Monad::Maybe::Just.new(self)
+    blk ? j.maybe(&blk) : j
   end
   
   def maybe?
@@ -35,7 +36,7 @@ class Object
 end
 
 class NilClass
-  def to_maybe
+  def to_maybe(&blk)
     Monad::Maybe::Nothing.instance
   end
 end
@@ -48,8 +49,9 @@ module Monad
   end
 end
 
-def maybe(obj)
-  Monad::Maybe.return(obj)
+def maybe(obj, &blk)
+  m = Monad::Maybe.return(obj)
+  blk ? m.maybe(&blk) : m
 end
 
 def just(o)

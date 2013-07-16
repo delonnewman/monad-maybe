@@ -25,10 +25,6 @@ module Monad
         true
       end
 
-      def maybe(&blk)
-        bind(blk)
-      end
-
       def bind(fn)
         fn[@value].to_maybe
       end

@@ -79,6 +79,15 @@ class MaybeTest < Test::Unit::TestCase
     end
   end
 
+  def test_to_maybe_blocks
+    1.to_maybe { |v| assert_equal 1, v }
+
+    assert_nothing_raised do
+      nil.to_maybe { raise Exception, "This should not run" }
+    end
+  end
+
+
   def test_maybe_block_return_value_and_type
     m = maybe(1).maybe { |n| n + 1 }
     assert_equal 2, m.value
