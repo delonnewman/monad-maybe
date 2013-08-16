@@ -7,10 +7,6 @@ require_relative 'maybe/list'
 # Some monkey patching and constructor methods.
 #
 module Enumerable
-  def to_maybe(&blk)
-    first.to_maybe(&blk)
-  end
-  
   def maybe_map
     Monad::Maybe::List.new(map{ |x| yield(x) })
   end
