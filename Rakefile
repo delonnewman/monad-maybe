@@ -8,6 +8,7 @@ Jeweler::Tasks.new do |gem|
   gem.email = "delon.newman@gmail.com"
   gem.homepage = "https://github.com/delonnewman/monad-maybe"
   gem.authors = ["Delon Newman"]
+  gem.license = 'MIT'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
