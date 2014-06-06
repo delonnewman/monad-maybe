@@ -9,7 +9,7 @@ module Monad
         value.send(method, *args).to_maybe
       end
   
-      def unwrap(val)
+      def unwrap(val=nil, &blk)
         value
       end
   

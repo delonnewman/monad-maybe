@@ -122,6 +122,11 @@ class MaybeTest < Test::Unit::TestCase
     maybe(1).then(->(){ assert true }).then(->(){ assert true })
   end
 
+  def test_unwrap
+    assert_equal maybe(1).unwrap(nil), maybe(nil).unwrap(1)
+    assert_equal maybe(1).unwrap { 3 }, nothing.unwrap { 1 }
+  end
+
   #
   # Monad laws
   #

@@ -37,8 +37,8 @@ module Monad
         false
       end
   
-      def unwrap(val)
-        val
+      def unwrap(val=nil, &blk)
+        val || blk.call
       end
   
       def value
