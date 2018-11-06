@@ -45,6 +45,8 @@ module Monad
   end
 end
 
+# some toplevel methods
+
 def maybe(obj, &blk)
   m = Monad::Maybe.return(obj)
   blk ? m.maybe(&blk) : m
@@ -56,4 +58,28 @@ end
 
 def nothing
   Monad::Maybe::Nothing.instance
+end
+
+def maybe?(x)
+  if not x.is_a? Monad::Maybe::Base
+    false
+  else
+    true
+  end
+end
+
+def just?(x)
+  if not x.is_a? Monad::Maybe::Just
+    false
+  else
+    true
+  end
+end
+
+def nothing?(x)
+  if x == Monad::Maybe::Nothing.instance
+    true
+  else
+    false
+  end
 end
