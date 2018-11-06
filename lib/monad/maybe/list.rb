@@ -3,12 +3,14 @@ module Monad
     class List
       include Enumerable
   
+      # TODO: add support for lazy evaluation
+
       def initialize(enum)
         @enum = enum.map { |v| v.maybe? ? v : v.to_maybe }
       end
   
       def inspect
-        "#{to_a}"
+        "maybe_list(#{@enum.map(&:inspect).join(', ')})"
       end
   
       def maybe?

@@ -14,20 +14,8 @@ end
   
 class Object
   def to_maybe(&blk)
-    j = Monad::Maybe::Just.new(self)
+    j = Monad::Maybe.return(self)
     blk ? j.maybe(&blk) : j
-  end
-  
-  def maybe?
-    false
-  end
-  
-  def just?
-    false
-  end
-  
-  def nothing?
-    false
   end
 end
 
@@ -40,7 +28,11 @@ end
 module Monad
   module Maybe
     def self.return(obj)
-      obj.to_maybe
+      if obj.nil? or nothing? obj
+        Monad::Maybe::Nothing.instance
+      else
+        Monad::Maybe::Just.new(obj)
+      end
     end
   end
 end
@@ -60,26 +52,31 @@ def nothing
   Monad::Maybe::Nothing.instance
 end
 
-def maybe?(x)
-  if not x.is_a? Monad::Maybe::Base
-    false
-  else
-    true
+module Kernel
+  def maybe?(x=nil)
+    return false if x.nil? # we assume it's being called as a method on an object like 0.maybe?
+    if not x.is_a? Monad::Maybe::Base
+      false
+    else
+      true
+    end
   end
-end
-
-def just?(x)
-  if not x.is_a? Monad::Maybe::Just
-    false
-  else
-    true
+  
+  def just?(x=nil)
+    return false if x.nil? # we assume it's being called as a method on an object like 0.maybe?
+    if not x.is_a? Monad::Maybe::Just
+      false
+    else
+      true
+    end
   end
-end
-
-def nothing?(x)
-  if x == Monad::Maybe::Nothing.instance
-    true
-  else
-    false
+  
+  def nothing?(x)
+    return false if x.nil? # we assume it's being called as a method on an object like 0.maybe?
+    if x == Monad::Maybe::Nothing.instance
+      true
+    else
+      false
+    end
   end
 end

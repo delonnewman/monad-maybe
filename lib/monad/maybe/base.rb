@@ -31,8 +31,6 @@ module Monad
       def and(&blk)
         self.then(blk)
       end
-  
-      private_class_method :new
     end
   end
 end
