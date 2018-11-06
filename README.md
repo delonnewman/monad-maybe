@@ -1,4 +1,4 @@
-`monad-maybe`
+Monad::Maybe
 =============
 
 An Implementation of Haskell's Maybe Mondad
