@@ -32,8 +32,7 @@ module Monad
         self.then(blk)
       end
   
-      private
-      def initialize; end
+      private_class_method :new
     end
   end
 end
