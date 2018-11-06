@@ -8,5 +8,6 @@ This is an attempt to implement Haskell's Maybe monad in a Ruby-ish way with as 
 
 SEE ALSO
 ========
-[andand](http://)
-[Haskell's Maybe Monad](http://)
+
+- [andand](https://rubygems.org/gems/andand)
+- [Haskell's Maybe Monad](http://hackage.haskell.org/package/base-4.12.0.0/docs/Prelude.html#t:Maybe)
